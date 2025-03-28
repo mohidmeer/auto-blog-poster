@@ -2,6 +2,9 @@ import { Coins, Delete, Edit, LogOut, Pause, Plus, Timer, Trash, Workflow } from
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom";
 import { getUsername } from "../lib/utils";
+import Modal from "../components/Modal";
+import AddCredits from "../components/AddCredits";
+import AddScheduleForm from "../components/AddSchedule";
 
 
 const Dashboard = () => {
@@ -24,11 +27,16 @@ const Dashboard = () => {
                         <div className="flex items-center gap-2  font-bold">
                             <span>12</span>
                             <Coins />
-                            <Button variant="outline" size="icon">
-                                <Plus className="w-4 h-4" />
-                            </Button>
+                            <Modal 
+                                title='Buy More Credits'
+                                content={<AddCredits/>} >
+                                <Button variant="outline" size="icon">
+                                    <Plus className="w-4 h-4" />
+                                </Button>
+                            </Modal>
+
                         </div>
-                        <Button size="icon" className="hover:bg-destructive" onClick={()=>{handleLogout()}}>
+                        <Button size="icon" className="hover:bg-destructive" onClick={() => { handleLogout() }}>
                             <LogOut className="w-4 h-4" />
                         </Button>
                     </div>
@@ -51,11 +59,12 @@ const Dashboard = () => {
                             <p className="text-sm">Total Posts</p>
                         </div>
 
-                        {/* Add New Schedule */}
+                        <Modal title="Add a new Schdeule" content={<AddScheduleForm/>}>
                         <div className="bg-primary text-white p-6 rounded-lg flex flex-col items-center justify-center">
                             <Plus className="size-8 border-white rounded-md p-1" />
                             <p className="text-sm mt-2">Add new Schedule</p>
                         </div>
+                        </Modal>
                     </div>
                 </div>
                 <div className="p-4">
@@ -63,11 +72,11 @@ const Dashboard = () => {
 
                     <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
 
-                        <Schedule/>
-                        <Schedule/>
-                        <Schedule/>
-                        <Schedule/>
-        
+                        <Schedule />
+                        <Schedule />
+                        <Schedule />
+                        <Schedule />
+
                     </div>
 
                 </div>
@@ -81,19 +90,17 @@ const Dashboard = () => {
 
 export default Dashboard
 
-
-
-function Schedule (){
+function Schedule() {
     return (
         <div className="border rounded-md   cursor-pointer hover:shadow-xl transition-all duration-300">
             <div className="p-4">
-                <Workflow/>
+                <Workflow />
             </div>
             <div className="bg-gray-100 p-2">
                 <h5 className="text-sm font-bold text-gray-800">Schedule Post Title</h5>
 
                 <div className="flex gap-1 text-xs font-bold text-gray-500 mt-2">
-                    <Timer size={16}/>
+                    <Timer size={16} />
                     <p>daily</p>
                     <p>|</p>
                     <p>8:00 AM</p>
@@ -104,19 +111,22 @@ function Schedule (){
                     </span>
                     <div className="flex gap-2">
                         <button   >
-                            <Edit size={16}/>
+                            <Edit size={16} />
                         </button>
                         <button  >
-                            <Pause size={16}/>
+                            <Pause size={16} />
                         </button>
                         <button  >
-                            <Trash size={16} className="text-destructive"/>
+                            <Trash size={16} className="text-destructive" />
                         </button>
 
                     </div>
                 </div>
-            
-            </div>                  
+
+            </div>
         </div>
     )
 }
+
+
+
