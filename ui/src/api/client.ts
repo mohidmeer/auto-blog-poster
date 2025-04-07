@@ -1,5 +1,4 @@
 import axios from 'axios';
-import AddCredits from '../components/AddCredits';
 
 const axiosClient = axios.create({
     baseURL: `http://api.igentworks.com/api/v1`,
@@ -37,7 +36,10 @@ export const apiService = {
         }
     } , 
 
-    async AddCredits(data){
+    async AddCredits(data:any){
+
+
+        console.log(data)
 
         try {
             
@@ -46,7 +48,9 @@ export const apiService = {
         }
     } ,
 
-    async AddSchedule(data){
+    async AddSchedule(data:any){
+
+        console.log(data)
 
 
         try {

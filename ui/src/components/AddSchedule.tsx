@@ -22,7 +22,7 @@ const AddScheduleForm = () => {
 
   const onSubmit = async (data: object) => {
     console.log(data);
-    const res = await apiService.AddSchedule(data);
+    await apiService.AddSchedule(data);
   };
 
   return (

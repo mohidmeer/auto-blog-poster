@@ -10,7 +10,7 @@ export function getUsername(){
 
   const token = localStorage.getItem("blogger-api-auth-token")
 
-  return JSON.parse(atob(token.split(".")[1])).username; // Decode JWT payload
+  return JSON.parse(atob(token!.split(".")[1])).username; // Decode JWT payload
 
 
 }

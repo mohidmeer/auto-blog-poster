@@ -1,4 +1,4 @@
-import { Coins, Delete, Edit, LogOut, Pause, Plus, Timer, Trash, Workflow } from "lucide-react"
+import { Coins, Edit, LogOut, Pause, Plus, Timer, Trash, Workflow } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom";
 import { getUsername } from "../lib/utils";
@@ -6,11 +6,8 @@ import Modal from "../components/Modal";
 import AddCredits from "../components/AddCredits";
 import AddScheduleForm from "../components/AddSchedule";
 
-
 const Dashboard = () => {
-
     const navigate = useNavigate()
-
     const handleLogout = () => {
         localStorage.removeItem("blogger-api-auth-token");
         navigate("/auth/login");
