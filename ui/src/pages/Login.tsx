@@ -12,9 +12,10 @@ const Login :React.FC = ()  => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (data:object) => {
+        const tid = toast.loading("Loging In...")
        const res =   await apiService.Login(data)
        if(res.success){
-        toast.success('Redirecting')
+        toast.update(tid, { render: "All is good", type: "success", isLoading: false });
         localStorage.setItem("blogger-api-auth-token", res.token);
         navigate('/dashboard')
        } else {

@@ -102,7 +102,7 @@ useEffect(() => {
                     </div>
 
                 </div>
-                <div className="h-[50vh] flex flex-col justify-center p-4 ">
+                <div className="h-[40vh] flex flex-col justify-center p-4 ">
                     <h1 className="text-6xl">Welcome back,<br />
                         <span className="font-bold">{getUsername()}</span>
                     </h1>
@@ -128,17 +128,9 @@ useEffect(() => {
                     </div>
                 </div>
                 <div className="p-4">
-                    <h4 className="text-2xl font-bold mb-4 ">Your Schedules</h4>
-
-               
-
+                    <h4 className="text-2xl font-bold mb-4  ">Your Schedules</h4>
                         <Schedule />
-                 
-              
-           
-
                     </div>
-
                 </div>
 
             </div>

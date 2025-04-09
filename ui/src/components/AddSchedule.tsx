@@ -2,6 +2,7 @@ import  { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../components/ui/button";
 import { apiService } from "../api/client";
+import { toast } from "react-toastify";
 
 const AddScheduleForm = () => {
     const {
@@ -22,32 +23,30 @@ const AddScheduleForm = () => {
     });
 
     const [loading, setLoading] = useState(false); // Track loading state
-    const [successMessage, setSuccessMessage] = useState<string | null>(null); // Track success message
-    const [errorMessage, setErrorMessage] = useState<string | null>(null); // Track error message
+    // const [successMessage, setSuccessMessage] = useState<string | null>(null); // Track success message
+    // const [errorMessage, setErrorMessage] = useState<string | null>(null); // Track error message
 
     const onSubmit = async (data: any) => {
+
+        const tid = toast.loading("Saving ....")
         console.log(data);
 
         setLoading(true); // Start loading
-        setSuccessMessage(null); // Clear previous success message
-        setErrorMessage(null); // Clear previous error message
 
         try {
             const response = await apiService.AddSchedule(data);
 
             if (response.success) {
-                setSuccessMessage("Schedule added successfully!");
-                setTimeout(() => {
-                    setSuccessMessage(null); // Clear success message after 3 seconds
-                }, 3000);
+                toast.update(tid, { render: "Added Schedule successfully", type: "success", isLoading: false , autoClose:1000 });
+                document.getElementById('close-dialog')?.click();
+                window.location.reload();
+               
             } else {
                 throw new Error("Failed to add schedule.");
             }
         } catch (error: any) {
-            setErrorMessage(error.message || "An error occurred while adding the schedule.");
-            setTimeout(() => {
-                setErrorMessage(null); // Clear error message after 3 seconds
-            }, 3000);
+            toast.update(tid, { render: "Error occured while saving schedule", type: "error", isLoading: false , autoClose:1000 });
+         
         } finally {
             setLoading(false); // Stop loading
         }
@@ -58,15 +57,7 @@ const AddScheduleForm = () => {
             className="flex-1 flex flex-col justify-center items-center overflow-auto"
             onSubmit={handleSubmit(onSubmit)}
         >
-            {/* Display Success Message */}
-            {successMessage && (
-                <p className="text-green-500 font-semibold mb-4">{successMessage}</p>
-            )}
-
-            {/* Display Error Message */}
-            {errorMessage && (
-                <p className="text-red-500 font-semibold mb-4">{errorMessage}</p>
-            )}
+       
 
             <div className="p-1 flex flex-col gap-2 max-w-[600px] mx-auto w-full max-h-screen overflow-auto">
                 <div className="flex flex-col gap-4">
