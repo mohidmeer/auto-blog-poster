@@ -13,22 +13,9 @@
    }
 
 
-   div#radix-\:r3\: {
-    position: fixed !important;
-    top: 50%!important;
-    left: 50%!important;
-    transform: translate(-50%, -50%)!important;
-    z-index: 9999!important;
-    /* margin-right: -11px; */
-}
 
-.top-\[50\%\] {
-    top: 10% !important;
-}
 
-.left-\[50\%\] {
-    left: 36% !important;
-}
+
 
 
    

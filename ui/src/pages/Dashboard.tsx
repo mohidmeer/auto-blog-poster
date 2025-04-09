@@ -8,7 +8,7 @@ import AddCredits from "../components/AddCredits";
 import AddScheduleForm from "../components/AddSchedule";
 import EditScheduleForm from "../components/EditSchedule";
 import { useEffect, useState } from "react";
-
+import { toast } from 'react-toastify';
 const Dashboard = () => {
     const navigate = useNavigate()
     const [credits, setCredits] = useState<number | null>(null); // State for credits
@@ -219,13 +219,14 @@ function Schedule() {
  const handleRunSchedule = async (_id: string) => {
     console.log("Pausing schedule with ID:", _id);
 
-    if (!window.confirm("Are you sure you want to run this schedule?")) return;
+
 
     try {
         const response = await apiService.RunSchedule(_id);
         console.log(response); // Call the PauseSchedule method
 
         if (response.success) {
+            toast.success('Schedule run successfully!')
             // Update the schedule's active state in the local state
             setSchedules((prevSchedules) =>
                 prevSchedules.map((schedule) =>
@@ -245,13 +246,14 @@ function Schedule() {
 const handleStopSchedule = async (_id: string) => {
     console.log("Stopping schedule with ID:", _id);
 
-    if (!window.confirm("Are you sure you want to stop this schedule?")) return;
 
     try {
         const response = await apiService.StopSchedule(_id);
         console.log(response); // Call the StopSchedule method
 
         if (response.success) {
+
+            toast.success('Schedule stopped successfully!')
             // Update the schedule's active state in the local state
             setSchedules((prevSchedules) =>
                 prevSchedules.map((schedule) =>

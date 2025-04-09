@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { apiService } from "../api/client";
-
+import { toast } from 'react-toastify';
 const EditScheduleForm = ({ schedule, onSuccess }: { schedule?: any; onSuccess?: () => void }) => {
   const {
     register,
@@ -32,6 +32,7 @@ const EditScheduleForm = ({ schedule, onSuccess }: { schedule?: any; onSuccess?:
   const onSubmit = async (data: any) => {
     try {
       if (schedule?._id) {
+        toast.success('Schedule Updated successfully!')
         await apiService.UpdateSchedule(schedule._id, data); // Use Update method if editing
       } else {
         await apiService.AddSchedule(data); // Otherwise add new

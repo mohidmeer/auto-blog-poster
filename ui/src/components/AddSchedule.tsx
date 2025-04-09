@@ -2,6 +2,7 @@ import  { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../components/ui/button";
 import { apiService } from "../api/client";
+import { toast } from 'react-toastify';
 
 const AddScheduleForm = () => {
     const {
@@ -36,6 +37,7 @@ const AddScheduleForm = () => {
             const response = await apiService.AddSchedule(data);
 
             if (response.success) {
+                    toast.success('Schedule added successfully!')
                 setSuccessMessage("Schedule added successfully!");
                 setTimeout(() => {
                     setSuccessMessage(null); // Clear success message after 3 seconds
@@ -55,7 +57,7 @@ const AddScheduleForm = () => {
 
     return (
         <form
-            className="flex-1 flex flex-col justify-center items-center overflow-auto"
+            className="flex-1 flex flex-col justify-center items-center overflow-auto  "
             onSubmit={handleSubmit(onSubmit)}
         >
             {/* Display Success Message */}
