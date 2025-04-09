@@ -27,6 +27,10 @@ add_action('admin_menu', function () {
 
 
 function render_auto_blog_poster() {
+
+
+
+    
     echo '<div id="auto-blogger"></div>';
 }
 
@@ -47,7 +51,26 @@ add_action('admin_enqueue_scripts', function ($hook) {
         'auto-blog-style',
         plugin_dir_url(__FILE__) . 'dist/assets/index.css',
         [],
-        '0.1.0'
+        '1.1.0'
     );
+    wp_enqueue_style(
+        'auto-blog-style-new',
+        plugin_dir_url(__FILE__) . 'dist/assets/style.css',
+        [],
+        '1.1.0'
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
 },100);
 

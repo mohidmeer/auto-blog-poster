@@ -6,6 +6,7 @@ import { apiService } from "../api/client";
 import Modal from "../components/Modal";
 import AddCredits from "../components/AddCredits";
 import AddScheduleForm from "../components/AddSchedule";
+import EditScheduleForm from "../components/EditSchedule";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
@@ -34,8 +35,31 @@ const Dashboard = () => {
 
 
 
+interface Schedule {
+    _id: string; // Ensure _id is included
+    title: string;
+    schedule: string; // e.g., "daily"
+    time: string; // e.g., "8:00 AM"
+    active: boolean; // e.g., true/false
+}
+const [schedules, setSchedules] = useState<Schedule[]>([]);
 
 
+useEffect(() => {
+    const fetchSchedules = async () => {
+        try {
+            const data = await apiService.GetAllSchedules();
+            setSchedules(data.schedules);
+        } catch (error: any) {
+            console.log(error)
+        } 
+    };
+
+    fetchSchedules();
+}, []);
+
+ // Dynamically calculate the number of active schedules
+ const activeSchedulesCount = schedules.filter((schedule) => schedule.active).length;
     
     const handleLogout = () => {
         localStorage.removeItem("blogger-api-auth-token");
@@ -85,7 +109,7 @@ const Dashboard = () => {
                     <div className="grid grid-cols-3 gap-4 max-w-2xl mt-10">
                         {/* Active Schedules */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
-                            <h2 className="text-2xl font-bold">12</h2>
+                            <h2 className="text-2xl font-bold">{activeSchedulesCount}</h2>
                             <p className="text-sm">Active Schedules</p>
                         </div>
 
@@ -246,16 +270,7 @@ const handleStopSchedule = async (_id: string) => {
 
 
 
-
-
-
-
-
-
-
-
-
-    return (
+ return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {schedules.map((item) => (
             <div
@@ -282,13 +297,16 @@ const handleStopSchedule = async (_id: string) => {
                             {item.active ? "active" : "paused"}
                         </span>
                         <div className="flex gap-2">
-                            <button>
-                                <Edit size={16} />
-                            </button>
-                            <button onClick={() => handleRunSchedule(item._id)}>
+                        <Modal title="Update Schedule" content={<EditScheduleForm schedule={item} onSuccess={() => window.location.reload()} />}>
+                     <button>
+                         <Edit size={16} />
+                       </button>
+                        </Modal>
+
+                            <button onClick={() => handleStopSchedule(item._id) }>
                                     <Play size={16} />
                                 </button>
-                                <button onClick={() => handleStopSchedule(item._id)}>
+                                <button onClick={() =>handleRunSchedule(item._id)  }>
                                     <Pause size={16}  />
                                 </button>
                             <button

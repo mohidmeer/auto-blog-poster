@@ -172,6 +172,28 @@ export const apiService = {
         }
     },
 
+    async UpdateSchedule(id: string, data: any): Promise<{ success: boolean }> {
+        try {
+            const response = await axiosClient.put(`/schedule/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
+                },
+            });
+    
+            if (response.data.success) {
+                return response.data;
+            } else {
+                throw new Error("Invalid API response format.");
+            }
+        } catch (error: any) {
+            console.error("Error updating schedule:", error);
+            throw new Error(error.response?.data?.message || "Failed to update schedule.");
+        }
+    }
+    
+
+    
+
 
     
 
