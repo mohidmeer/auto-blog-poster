@@ -35,6 +35,7 @@ const EditScheduleForm = ({ schedule, onSuccess }: { schedule?: any; onSuccess?:
         await apiService.UpdateSchedule(schedule._id, data); // Use Update method if editing
       } else {
         await apiService.AddSchedule(data); // Otherwise add new
+        document.getElementById('update')?.click()
       }
       if (onSuccess) onSuccess(); // Callback to refresh data
     } catch (error) {

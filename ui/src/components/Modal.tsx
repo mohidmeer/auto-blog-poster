@@ -6,7 +6,7 @@ import {
     DialogTrigger,
     DialogClose
 } from "../components/ui/dialog"
-const Modal = ({ children, content, title }: { children: any, content: any, title: string }) => {
+const Modal = ({id='close-dialog', children, content, title }: {id:string, children: any, content: any, title: string }) => {
     return (
         <Dialog>
             
@@ -16,10 +16,8 @@ const Modal = ({ children, content, title }: { children: any, content: any, titl
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogClose id={'close-dialog'}/>
+                    <DialogClose id={id}/>
                 </DialogHeader>
-
-                {/* Form will be here  */}
                 {content}
             </DialogContent>
         </Dialog>

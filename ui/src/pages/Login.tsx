@@ -15,7 +15,7 @@ const Login :React.FC = ()  => {
         const tid = toast.loading("Loging In...")
        const res =   await apiService.Login(data)
        if(res.success){
-        toast.update(tid, { render: "All is good", type: "success", isLoading: false });
+        toast.update(tid, { render: "All is good", type: "success", isLoading: false , autoClose:1000 });
         localStorage.setItem("blogger-api-auth-token", res.token);
         navigate('/dashboard')
        } else {

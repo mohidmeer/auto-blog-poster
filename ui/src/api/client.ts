@@ -5,6 +5,25 @@ const axiosClient = axios.create({
     headers: { "Content-Type": "application/json" },
 });
 
+// FIX 
+
+axiosClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("blogger-api-auth-token");
+
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        } else {
+            console.log("No token found, proceeding without Authorization header.");
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 
 export const apiService = {
     async Login(data: any) {
@@ -15,7 +34,6 @@ export const apiService = {
             console.log(error)
         }
     },
-
     async Register(data:any){
         try {
             const res = await axiosClient.post('/register', data)
@@ -25,14 +43,9 @@ export const apiService = {
         }
 
     } ,
-
     async GetAllSchedules(): Promise<{ success: boolean; schedules: Schedule[] }> {
         try {
-            const response = await axiosClient.get("/schedule", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.get("/schedule");
 
             console.log(response);
 
@@ -46,16 +59,11 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "Failed to fetch schedules.");
         }
     },
-
     async DeleteSchedule(id: string): Promise<{ success: boolean }> {
 
        
         try {
-            const response = await axiosClient.delete(`/schedule/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.delete(`/schedule/${id}`, );
 
         
 
@@ -69,16 +77,11 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "Failed to delete schedule.");
         }
     },
-    
     async RunSchedule(id: string): Promise<{ success: boolean }> {
 
        
         try {
-            const response = await axiosClient.get(`/schedule/${id}/run`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.get(`/schedule/${id}/run`, );
 
         
 
@@ -91,19 +94,12 @@ export const apiService = {
             console.error("Error deleting schedule:", error);
             throw new Error(error.response?.data?.message || "Failed to delete schedule.");
         }
-    },
-
-
-    
+    },    
     async StopSchedule(id: string): Promise<{ success: boolean }> {
 
        
         try {
-            const response = await axiosClient.get(`/schedule/${id}/stop`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.get(`/schedule/${id}/stop`, );
 
         
 
@@ -119,11 +115,7 @@ export const apiService = {
     },
     async AddCredits(data: { quantity: number }) {
         try {
-            const response = await axiosClient.post("/credits", data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.post("/credits", data, );
 
             return response.data; // Return the API response
         } catch (error: any) {
@@ -131,14 +123,9 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "Failed to add credits.");
         }
     },
-
     async ShowCredits(): Promise<{ success: boolean; credits: number }> {
         try {
-            const response = await axiosClient.get("/credits", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.get("/credits", );
 
             if (response.data.success && typeof response.data.credits === "number") {
                 return response.data;
@@ -150,16 +137,9 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "Failed to fetch credits.");
         }
     },
-
-
-    
     async AddSchedule(data: any): Promise<{ success: boolean; message?: string }> {
         try {
-            const response = await axiosClient.post("/schedule", data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.post("/schedule", data, );
 
             if (response.data.success) {
                 return response.data;
@@ -171,14 +151,9 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "An error occurred while adding the schedule.");
         }
     },
-
     async UpdateSchedule(id: string, data: any): Promise<{ success: boolean }> {
         try {
-            const response = await axiosClient.put(`/schedule/${id}`, data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("blogger-api-auth-token")}`,
-                },
-            });
+            const response = await axiosClient.put(`/schedule/${id}`, data, );
     
             if (response.data.success) {
                 return response.data;
@@ -190,12 +165,6 @@ export const apiService = {
             throw new Error(error.response?.data?.message || "Failed to update schedule.");
         }
     }
-    
-
-    
-
-
-    
 
 }
 
