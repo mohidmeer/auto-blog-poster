@@ -109,13 +109,13 @@ useEffect(() => {
                     <div className="grid grid-cols-3 gap-4 max-w-2xl mt-10">
                         {/* Active Schedules */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
-                            <h2 className="text-2xl font-bold">{activeSchedulesCount}</h2>
+                            <p className="text-2xl font-bold">{activeSchedulesCount}</p>
                             <p className="text-sm">Active Schedules</p>
                         </div>
 
                         {/* Total Posts */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
-                            <h2 className="text-2xl font-bold">102</h2>
+                            <p className="text-2xl font-bold">102</p>
                             <p className="text-sm">Total Posts</p>
                         </div>
 
@@ -273,8 +273,8 @@ const handleStopSchedule = async (_id: string) => {
                     <Workflow />
                 </div>
                 <div className="bg-gray-100 p-2">
-                    <h5 className="text-sm font-bold text-gray-800">{item.title}</h5>
-                    <div className="flex gap-1 text-xs font-bold text-gray-500 mt-2">
+                    <p className="text-sm font-bold text-gray-800 p-0">{item.title}</p>
+                    <div className="gap-1 text-xs font-bold text-gray-500 mt-2 flex items-center">
                         <Timer size={16} />
                         <p>{item.schedule}</p>
                         <p>|</p>

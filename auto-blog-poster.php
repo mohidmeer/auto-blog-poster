@@ -28,10 +28,7 @@ add_action('admin_menu', function () {
 
 function render_auto_blog_poster() {
 
-
-
-    
-    echo '<div id="auto-blogger"></div>';
+    echo '<div   id="auto-blogger"></div>';
 }
 
 add_action('admin_enqueue_scripts', function ($hook) {

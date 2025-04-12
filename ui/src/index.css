@@ -6,6 +6,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -118,6 +119,27 @@
 
 @layer base {
 
+  #auto-blogger {
+    all: initial !important;
+    font-family: inherit !important;
+    line-height: normal !important;
+  }
+  
+  #auto-blogger p,
+  #auto-blogger h1,
+  #auto-blogger h2,
+  #auto-blogger h3,
+  #auto-blogger ul,
+  #auto-blogger ol,
+  #auto-blogger li,
+  #auto-blogger blockquote {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+
+  
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -137,6 +159,9 @@
  
   
 }
+
+
+
 [data-error="true"] {
   @apply !ring-red-400
 }
