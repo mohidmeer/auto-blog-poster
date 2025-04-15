@@ -1,4 +1,4 @@
-import { Coins, Edit, LogOut, Pause, Play, Plus, Timer, Trash, Workflow } from "lucide-react"
+import { Coins, Edit, Globe, LogOut, Pause, Play, Plus, Timer, Trash, Workflow } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom";
 import { getUsername } from "../lib/utils";
@@ -8,16 +8,20 @@ import AddCredits from "../components/AddCredits";
 import AddScheduleForm from "../components/AddSchedule";
 import EditScheduleForm from "../components/EditSchedule";
 import { useEffect, useState } from "react";
+import moment from 'moment';
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "../components/ui/hover-card"
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const [credits, setCredits] = useState<number | null>(null); // State for credits
-    const [loadingCredits, setLoadingCredits] = useState(true); // Track loading state for credits
+    const [credits, setCredits] = useState<number | null>(null);
+    const [loadingCredits, setLoadingCredits] = useState(true);
     const [creditError, setCreditError] = useState<string | null>(null);
+    const [activeSchedulesCount, setActiveScheduleCount] = useState(0)
 
-
-    // Fetch credits on component mount
-    // Fetch credits on component mount
     useEffect(() => {
         const fetchCredits = async () => {
             try {
@@ -35,32 +39,8 @@ const Dashboard = () => {
 
 
 
-    interface Schedule {
-        _id: string; // Ensure _id is included
-        title: string;
-        schedule: string; // e.g., "daily"
-        time: string; // e.g., "8:00 AM"
-        active: boolean; // e.g., true/false
-        website_url: string,
-    }
-    const [schedules, setSchedules] = useState<Schedule[]>([]);
-
-
-    useEffect(() => {
-        const fetchSchedules = async () => {
-            try {
-                const data = await apiService.GetAllSchedules();
-                setSchedules(data.schedules);
-            } catch (error: any) {
-                console.log(error)
-            }
-        };
-
-        fetchSchedules();
-    }, []);
-
     // Dynamically calculate the number of active schedules
-    const activeSchedulesCount = schedules.filter((schedule) => schedule.active).length;
+
 
     const handleLogout = () => {
         localStorage.removeItem("blogger-api-auth-token");
@@ -90,11 +70,11 @@ const Dashboard = () => {
                             ) : (
                                 <>
                                     <span>{credits ?? 0}</span> {/* Display credits or 0 if undefined */}
-
                                 </>
                             )}
                             <Coins />
                             <Modal
+                                id="credits"
                                 title='Buy More Credits'
                                 content={<AddCredits />} >
                                 <Button variant="outline" size="icon">
@@ -109,11 +89,11 @@ const Dashboard = () => {
                     </div>
 
                 </div>
-                <div className="h-[40vh] flex flex-col justify-center p-4 ">
+                <div className="min-h-[40vh] flex flex-col justify-center p-4 ">
                     <h1 className="text-6xl">Welcome back,<br />
                         <span className="font-bold">{getUsername()}</span>
                     </h1>
-                    <div className="grid grid-cols-3 gap-4 max-w-2xl mt-10">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mt-10">
                         {/* Active Schedules */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
                             <p className="text-2xl font-bold">{activeSchedulesCount}</p>
@@ -126,7 +106,7 @@ const Dashboard = () => {
                             <p className="text-sm">Total Posts</p>
                         </div>
 
-                        <Modal id="blog-id" title="Add a new Schdeule" content={<AddScheduleForm />}>
+                        <Modal id="blog-id" title="Add a new blog schedule" content={<AddScheduleForm />}>
                             <div className="bg-primary text-white p-6 rounded-lg flex flex-col items-center justify-center">
                                 <Plus className="size-8 border-white rounded-md p-1" />
                                 <p className="text-sm mt-2">Add new Schedule</p>
@@ -136,7 +116,7 @@ const Dashboard = () => {
                 </div>
                 <div className="p-4">
                     <h4 className="text-2xl font-bold mb-4  ">Your Schedules</h4>
-                    <Schedule />
+                    <Schedule setActiveScheduleCount={setActiveScheduleCount} />
                 </div>
             </div>
 
@@ -150,20 +130,27 @@ const Dashboard = () => {
 export default Dashboard
 
 
-
-
-
-function Schedule() {
-
-
+function Schedule({ setActiveScheduleCount }: { setActiveScheduleCount: any }) {
     interface Schedule {
-        _id: string; // Ensure _id is included
+        _id: string; // MongoDB ObjectID
         title: string;
-        schedule: string; // e.g., "daily"
-        time: string; // e.g., "8:00 AM"
-        active: boolean; // e.g., true/false
-        website_url: string,
+        instructions: string;
+        niche: string;
+        schedule: string; // e.g., "minute"
+        username: string;
+        password: string;
+        website_url: string;
+        publish_status: boolean; // e.g., false
+        include_image: boolean; // e.g., false
+        time: string; // e.g., "08:00"
+        active: boolean; // e.g., false
+        last_run: {
+            time: string | null;
+            message: string | null;
+            status: boolean;
+        };
     }
+
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loadingSchedules, setLoadingSchedules] = useState(true);
     const [scheduleError, setScheduleError] = useState<string | null>(null);
@@ -172,7 +159,8 @@ function Schedule() {
         const fetchSchedules = async () => {
             try {
                 const data = await apiService.GetAllSchedules();
-                setSchedules(data.schedules);
+                setSchedules(data.schedules as Schedule[]);
+                setActiveScheduleCount(data.schedules.filter(schedule => schedule.active).length);
             } catch (error: any) {
                 setScheduleError(error.message || "An error occurred while fetching schedules.");
             } finally {
@@ -193,10 +181,6 @@ function Schedule() {
         </div>
     );
     if (scheduleError) return <p className="text-red-500">{scheduleError}</p>;
-
-
-
-
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {schedules.map((item) => (
@@ -206,41 +190,60 @@ function Schedule() {
                 >
                     <div className="p-4 flex items-center justify-between">
                         <Workflow />
-                        <p className="font-bold text-sm">{new URL(item.website_url).hostname}</p>
+                        <div className="flex gap-2">
+                            <Modal id="update" title="Update Schedule" content={<EditScheduleForm schedule={item} />}>
+                                <Button variant={'outline'}>
+                                    <Edit size={20} />
+                                </Button>
+                            </Modal>
+                            {
+                                item.active ?
+                                    <PauseSchedule id={item._id} title={item.title} setSchedules={setSchedules} /> :
+                                    <RunSchedule message={item.last_run.message} id={item._id}  setSchedules={setSchedules} />
+                            }
+                            <DeleteSchedule id={item._id} title={item.title} setSchedules={setSchedules} />
+                        </div>
                     </div>
-
-                    <div className="bg-gray-100 p-2">
-                        <p className="text-sm font-bold text-gray-800 p-0 line-clamp-2">{item.title}</p>
+                    <div className="bg-gray-100 p-2 flex  flex-col gap-2 text-gray-800">
+                        <p className="font-bold  p-0 line-clamp-2">{item.title}</p>
                         <div className="gap-1 text-sm font-bold text-gray-500 mt-2 flex items-center">
-                            <Timer size={16} />
+                            <Timer size={20} />
                             <p>{item.schedule}</p>
                             <p>|</p>
                             <p>{item.time}</p>
                         </div>
                         <div className="mt-2 flex items-center justify-between">
-                            <div
-                                className={`${item.active ? "bg-green-600" : "bg-red-500"
-                                    } inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-white font-bold`}
-                            >
-                                {item.active ? "active" : "paused"}
+                            <div className="flex gap-1 items-center ">
+                                <Globe size={20} />
+                                <p className="font-bold text-sm ">{new URL(item.website_url).hostname}</p>
                             </div>
-                            <div className="flex gap-2">
-                                <Modal id="update" title="Update Schedule" content={<EditScheduleForm schedule={item} onSuccess={() => window.location.reload()} />}>
-                                    <Edit size={20} />
-                                </Modal>
-
+                            <HoverCard openDelay={100} >
+                                <HoverCardTrigger>
+                                    {
+                                        item.last_run.status ?
+                                            <div className="flex gap-2 items-center">
+                                                <span className={`${item.active ? "bg-green-600" : "bg-yellow-500"} size-3 rounded-full`}></span>
+                                                <p className="text-sm font-bold text-black">{item.active ? "Active" : "Paused"}</p>
+                                            </div>
+                                            :
+                                            <div className="flex items-center gap-1">
+                                                <span className="size-3 bg-red-700 rounded-full" ></span>
+                                                <p className="text-sm font-bold text-black">Error</p>
+                                            </div>
+                                    }
+                                </HoverCardTrigger>
                                 {
-
-                                    item.active ?
-                                        <PauseSchedule id={item._id} title={item.title} setSchedules={setSchedules} /> :
-                                        <RunSchedule id={item._id} title={item.title} setSchedules={setSchedules} />
+                                    item.last_run.time &&
+                                    (
+                                        <HoverCardContent className="w-[400px] flex flex-col gap-2">
+                                            <p className="text-gray-800 font-semibold text-base">
+                                                Last run <span className=""> {moment(item.last_run.time).fromNow()} </span>
+                                            </p>
+                                            {item.last_run.message}
+                                        </HoverCardContent>
+                                    )
                                 }
-
-
-
-                                <DeleteSchedule id={item._id} title={item.title} setSchedules={setSchedules} />
-
-                            </div>
+                            </HoverCard>
                         </div>
                     </div>
                 </div>
@@ -248,8 +251,6 @@ function Schedule() {
         </div>
     )
 }
-
-
 function PauseSchedule({ title, id, setSchedules }: { title: string, id: string, setSchedules: any }) {
     async function pause() {
         try {
@@ -276,19 +277,21 @@ function PauseSchedule({ title, id, setSchedules }: { title: string, id: string,
             title={title}
             content={
                 <>
-                    <p className="text-sm text-muted-foreground font-bold">Are you sure you want to pause this schedule ?</p>
+                    <p className="text-sm text-muted-foreground font-semibold">Are you sure you want to pause this schedule ?</p>
 
                     <Button variant={'outline'} className="bg-amber-300 hover:bg-amber-400" onClick={() => { pause() }}>
                         Pause Schedule
                     </Button>
                 </>
             }>
-            <Pause size={20} className="text-amber-400 cursor-pointer" />
+            <Button variant={'outline'}>
+                <Pause size={20} className="text-amber-400 cursor-pointer" />
+            </Button>
+
         </Modal>
     )
 }
-
-function RunSchedule({ title, id, setSchedules }: { title: string, id: string, setSchedules: any }) {
+function RunSchedule({  id, setSchedules ,message}: {  id: string, setSchedules: any, message: string | null; }) {
     async function run() {
         try {
             const response = await apiService.RunSchedule(id);
@@ -296,7 +299,12 @@ function RunSchedule({ title, id, setSchedules }: { title: string, id: string, s
             if (response.success) {
                 setSchedules((prevSchedules: any) =>
                     prevSchedules.map((schedule: any) =>
-                        schedule._id === id ? { ...schedule, active: true } : schedule
+                        schedule._id === id ? {
+                            ...schedule, active: true, last_run: {
+                                ...schedule.last_run,
+                                status: true
+                            }
+                        } : schedule
                     )
                 );
             } else {
@@ -310,17 +318,20 @@ function RunSchedule({ title, id, setSchedules }: { title: string, id: string, s
     return (
         <Modal
             id="run"
-            title={title}
+            title={'Are you sure you want to run this schedule ?'}
             content={
                 <>
-                    <p className="text-sm text-muted-foreground font-bold">Are you sure you want to run this schedule ?</p>
-
+                    
+                    <p className="text-sm font-semibold ">{message}</p>
                     <Button onClick={() => { run() }}>
                         Start Schedule
                     </Button>
                 </>
             }>
-            <Play size={20} className="text-green-600 cursor-pointer" />
+            <Button variant={'outline'}>
+                <Play size={20} className="text-green-600 cursor-pointer" />
+            </Button>
+
         </Modal>
     )
 }
@@ -347,17 +358,17 @@ function DeleteSchedule({ title, id, setSchedules }: { title: string, id: string
             title={title}
             content={
                 <>
-                    <p className="text-sm text-muted-foreground font-bold">Are you sure you want to run this schedule ?</p>
+                    <p className="text-sm text-muted-foreground font-semibold">Are you sure you want to run this schedule ?</p>
 
                     <Button variant={'destructive'} onClick={() => { del() }}>
                         Delete Schedule
                     </Button>
                 </>
             }>
-            <Trash size={20} className="text-destructive cursor-pointer" />
+            <Button variant={'outline'}>
+                <Trash size={20} className="text-destructive cursor-pointer" />
+            </Button>
+
         </Modal>
     )
 }
-
-
-

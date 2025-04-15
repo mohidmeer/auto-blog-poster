@@ -135,8 +135,14 @@
   #auto-blogger blockquote {
     margin: 0 !important;
     padding: 0 !important;
+    
   }
+
   
+ .modals > h1,h2,p {
+  margin: 0 !important;
+ }
+
 
   
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: `http://api.igentworks.com/api/v1`,
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
     headers: { "Content-Type": "application/json" },
 });
 

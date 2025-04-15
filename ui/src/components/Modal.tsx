@@ -8,15 +8,14 @@ import {
 } from "../components/ui/dialog"
 const Modal = ({id='close-dialog', children, content, title }: {id:string, children: any, content: any, title: string }) => {
     return (
-        <Dialog>
-            
+        <Dialog >
             <DialogTrigger>
                 {children}
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="modals">
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogClose id={id}/>
+                    <DialogTitle >{title}</DialogTitle>
+                    <DialogClose className="modal" id={id}/>
                 </DialogHeader>
                 {content}
             </DialogContent>

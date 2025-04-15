@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 const isTokenExpired = (token:string) => {
     try {
-        const decodedPayload = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
-        console.log(decodedPayload)
-        console.log(decodedPayload)
-        const expirationTime = decodedPayload.exp * 1000; // Convert to milliseconds
-        return Date.now() > expirationTime; // Check if expired
+        const decodedPayload = JSON.parse(atob(token.split(".")[1]));
+        const expirationTime = decodedPayload.exp * 1000;
+        return Date.now() > expirationTime; 
     } catch (error) {
-        return true; // If decoding fails, treat it as expired
+        return true; 
     }
 };
 

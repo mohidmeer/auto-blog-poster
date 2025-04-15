@@ -28,7 +28,11 @@ add_action('admin_menu', function () {
 
 function render_auto_blog_poster() {
 
+    $nonce = wp_create_nonce('wp_rest');
     echo '<div   id="auto-blogger"></div>';
+    echo "<script>
+        window.autoBloggerData = {nonce: '$nonce'};
+    </script>";
 }
 
 add_action('admin_enqueue_scripts', function ($hook) {
@@ -38,11 +42,18 @@ add_action('admin_enqueue_scripts', function ($hook) {
    
     wp_enqueue_script(
         'auto-blog-app',
-        plugin_dir_url(__FILE__) . 'dist/assets/index.js', 
-        ['wp-element'], 
+        plugin_dir_url(__FILE__) . 'dist/assets/index.js',
+        [],
         '0.1.0',
         true
     );
+    
+    add_filter('script_loader_tag', function ($tag, $handle) {
+        if ($handle === 'auto-blog-app') {
+            return str_replace('src=', 'type="module" src=', $tag);
+        }
+        return $tag;
+    }, 10, 2);
 
     wp_enqueue_style(
         'auto-blog-style',
@@ -50,23 +61,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
         [],
         '1.1.0'
     );
-    wp_enqueue_style(
-        'auto-blog-style-new',
-        plugin_dir_url(__FILE__) . 'dist/assets/style.css',
-        [],
-        '1.1.0'
-    );
-
-
-
-
-
-
-
-
-
-
-
 
 
 },100);

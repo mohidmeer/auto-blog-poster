@@ -2,14 +2,28 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import { Button } from '../components/ui/button';
 import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiService } from '../api/client';
+import { toast } from 'react-toastify';
 
 const Register: React.FC = () => {
 
+    const navigate = useNavigate()
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = async (data: any) => {
 
         console.log(data)
+
+        const tid = toast.loading("Registering ...")
+               const res =   await apiService.Register(data)
+               if(res.success){
+                toast.update(tid, { render: "Redirecting ....", type: "success", isLoading: false , autoClose:1000 });
+                console.log(res)
+                navigate('/auth/login')
+               } else {
+                toast.update(tid, { render: res.message, type: "error", isLoading: false , autoClose:1000 });
+          
+               }
 
     }
     return (
@@ -27,13 +41,13 @@ const Register: React.FC = () => {
                 <div className="relative w-full">
                   
                     <input
-                        data-error={errors.name && true}
+                        data-error={errors.username && true}
                         className="input w-full"
                         placeholder="John Doe"
-                        {...register('name', { required: 'Name is required' })}
+                        {...register('username', { required: 'Name is required' })}
                     />
                 </div>
-                {errors.name && <p className="text-sm font-semibold text-red-500">{errors.name.message as string}</p>}
+                {errors.username && <p className="text-sm font-semibold text-red-500">{errors.username.message as string}</p>}
             </div>
 
             <div className="flex flex-col gap-1 w-full">
