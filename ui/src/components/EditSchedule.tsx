@@ -248,8 +248,8 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
                   </Button>
                 </HoverCardTrigger>
                 <HoverCardContent className="w-[400px] flex flex-col gap-2">
-                  <p className="text-gray-800 font-semibold">
-                    You can create a WordPress application password manually by going to your <strong>Profile &gt; Application Passwords</strong> and generating one yourself. <br />
+                  <p className="text-gray-800 text-base font-semibold">
+                    You can create a WordPress application password manually by going to your <strong className="font-bold">Profile &gt; Application Passwords</strong> and generating one yourself. <br />
                     Or, simply click the button below to automatically generate a WordPress application password for you.
                   </p>
                 </HoverCardContent>
