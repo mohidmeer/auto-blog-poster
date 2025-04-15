@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
@@ -8,7 +8,16 @@ import { toast } from 'react-toastify';
 
 
 const Login: React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const authToken = localStorage.getItem("blogger-api-auth-token");
+        console.log(authToken)
+        if (authToken) {
+            navigate('/dashboard'); // This stays the same
+            window.location.hash = '#/dashboard'; // Force it manually for WordPress
+        }
+    }, [navigate]);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (data: object) => {
