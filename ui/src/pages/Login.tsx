@@ -36,7 +36,7 @@ const Login: React.FC = () => {
         <form className='flex-1 flex flex-col justify-center  items-center  ' onSubmit={handleSubmit(onSubmit)} >
             <div className='p-1 flex flex-col gap-2 max-w-[450px] mx-auto  w-full'>
                 <div className='mb-6 flex items-center justify-center'>
-                    <Logo />
+                    <Logo size={300} />
                 </div>
                 <div className='mb-6'>
                     <h1 className='text-2xl font-semibold '>Log in to your account</h1>

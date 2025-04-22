@@ -14,6 +14,7 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "../components/ui/hover-card"
+import Logo from "../components/Logo";
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -50,10 +51,11 @@ const Dashboard = () => {
         <div className="p-10 ">
             <div className="max-w-6xl mx-auto shadow-2xl p-4 border rounded-md">
                 <div className="flex justify-between items-center border-b pb-1">
-                    <div className="flex items-center gap-1 font-bold">
+                    <Logo size={200}/>
+                    {/* <div className="flex items-center gap-1 font-bold">
                         <div className="size-6  bg-primary" />
                         Blog Flix
-                    </div>
+                    </div> */}
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-2  font-bold">
                             {/* Loading or Error State for Credits */}

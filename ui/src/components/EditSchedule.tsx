@@ -49,7 +49,7 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
           'Content-Type': 'application/json',
           'X-WP-Nonce': nonce,
         },
-        body: JSON.stringify({ name: 'Auto Blogger' }),
+        body: JSON.stringify({ name: 'Igent Poster' }),
         credentials: 'include',
       });
       const data = await res.json();

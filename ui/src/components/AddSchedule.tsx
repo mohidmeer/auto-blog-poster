@@ -21,7 +21,7 @@ const AddScheduleForm = () => {
             title: "",
             instructions: "",
             niche: "",
-            schedule: "minute",
+            schedule: null,
             time: "08:00",
             username: "admin",
             website_url: window.location.origin,
@@ -197,7 +197,7 @@ const AddScheduleForm = () => {
                             <select
                                 className="input w-full input-sm"
                                 data-error={errors.schedule && true}
-                                {...register("schedule")}
+                                {...register("schedule" ,{ required: "Schedule is required" } )}
                             >
                                 {
                                     import.meta.env.VITE_ENV == 'dev' &&
@@ -207,6 +207,11 @@ const AddScheduleForm = () => {
                                 <option value="weekly">Weekly</option>
                                 <option value="monthly">Monthly</option>
                             </select>
+                            {errors.schedule && (
+                                <p className="text-xs mt-1 font-semibold text-red-500">
+                                    {errors.schedule.message as string}
+                                </p>
+                            )}
                         </div>
 
                         {/* Time */}

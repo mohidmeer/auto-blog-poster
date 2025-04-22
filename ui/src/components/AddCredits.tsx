@@ -8,7 +8,7 @@ interface AddCreditsProps {}
 const AddCredits: React.FC<AddCreditsProps> = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<{ quantity: number }>({
         defaultValues: {
-            quantity: 50, // Default value for quantity
+            quantity: 60, // Default value for quantity
         },
     });
 
@@ -50,10 +50,13 @@ const AddCredits: React.FC<AddCreditsProps> = () => {
                                     errors.quantity ? "border-red-500" : ""
                                 }`}
                                 type="number"
-                                placeholder="100"
+                                placeholder="120"
+                                step={60}
+                                min={60}
                                 {...register("quantity", {
                                     required: "Quantity is required",
-                                    min: { value: 50, message: "Minimum 50 credits" },
+                                    min: { value: 60, message: "Minimum 60 credits" },
+                                    
                                 })}
                             />
                         </div>

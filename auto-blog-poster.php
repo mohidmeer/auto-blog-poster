@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Auto Blog Poster
- * Description: AI Auto Blogger is a powerful WordPress plugin that automates content creation using advanced AI. It allows you to generate high-quality blog posts on a predefined schedule, keeping your website fresh and engaging without manual effort.
- * Version: 0.1.0
- * Author: Stuart Steinberg
+ * Plugin Name: Igentworks Auto Blogs
+ * Description: Igentworks Auto Blogs is a powerful WordPress plugin that automates content creation using advanced AI. It allows you to generate high-quality blog posts on a predefined schedule, keeping your website fresh and engaging without manual effort.
+ * Version: 1.0.0
+ * Author: Igentworks
  */
 
 if (!defined('ABSPATH')) {
@@ -14,8 +14,8 @@ if (!defined('ABSPATH')) {
 // Register admin menu
 add_action('admin_menu', function () {
     add_menu_page(
-        'AI Auto Blogger', 
-        'Auto Blog Poster', 
+        'Igentworks Auto Blogs', // website title 
+        'Auto Blogs',  // sidemenu
         'manage_options', 
         'auto-blog-poster', 
         'render_auto_blog_poster', 

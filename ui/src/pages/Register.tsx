@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col  justify-center  items-center ">
             <div className='mb-6 flex items-center justify-center'>
-                    <Logo/>
+                    <Logo size={300}/>
                 </div>
                 <div className='mb-6'>
                     <h1 className='text-2xl font-semibold '>Create a new account</h1>
