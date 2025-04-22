@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import { Button } from "../components/ui/button";
 import { apiService } from "../api/client";
 
-interface AddCreditsProps {}
+interface AddCreditsProps { }
 
 const AddCredits: React.FC<AddCreditsProps> = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<{ quantity: number }>({
+    const { register, handleSubmit, formState: { errors } } = useForm<{ quantity: number , callback_url:string }>({
         defaultValues: {
             quantity: 60, // Default value for quantity
+            callback_url: window.location.href
         },
     });
 
@@ -16,6 +17,7 @@ const AddCredits: React.FC<AddCreditsProps> = () => {
     const [error, setError] = React.useState<string | null>(null); // Track error state
 
     const onSubmit = async (data: { quantity: number }) => {
+
         setLoading(true);
         setError(null);
 
@@ -46,9 +48,8 @@ const AddCredits: React.FC<AddCreditsProps> = () => {
                         <label className="text-sm">Enter Credits</label>
                         <div className="relative w-full">
                             <input
-                                className={`input w-full ${
-                                    errors.quantity ? "border-red-500" : ""
-                                }`}
+                                className={`input w-full ${errors.quantity ? "border-red-500" : ""
+                                    }`}
                                 type="number"
                                 placeholder="120"
                                 step={60}
@@ -56,7 +57,7 @@ const AddCredits: React.FC<AddCreditsProps> = () => {
                                 {...register("quantity", {
                                     required: "Quantity is required",
                                     min: { value: 60, message: "Minimum 60 credits" },
-                                    
+
                                 })}
                             />
                         </div>
@@ -67,7 +68,7 @@ const AddCredits: React.FC<AddCreditsProps> = () => {
                             </p>
                         )}
                     </div>
-
+                    <input {...register("callback_url")}type="hidden"/>
                     {/* Buy Button */}
                     <div className="flex flex-col gap-1">
                         <Button disabled={loading}>
