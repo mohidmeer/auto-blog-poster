@@ -63,5 +63,5 @@ add_action('admin_enqueue_scripts', function ($hook) {
     );
 
 
-},100);
+},1000);
 
