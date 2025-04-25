@@ -4,6 +4,8 @@
  * Description: Igentworks Auto Blogs is a powerful WordPress plugin that automates content creation using advanced AI. It allows you to generate high-quality blog posts on a predefined schedule, keeping your website fresh and engaging without manual effort.
  * Version: 1.0.0
  * Author: Igentworks
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) {

@@ -21,7 +21,7 @@ const AddScheduleForm = () => {
             title: "",
             instructions: "",
             niche: "",
-            schedule: null,
+            schedule: 'daily',
             time: "08:00",
             username: "admin",
             website_url: window.location.origin,
@@ -205,7 +205,6 @@ const AddScheduleForm = () => {
                                 }
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
-                                <option value="monthly">Monthly</option>
                             </select>
                             {errors.schedule && (
                                 <p className="text-xs mt-1 font-semibold text-red-500">

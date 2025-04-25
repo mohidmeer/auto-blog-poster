@@ -156,7 +156,6 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
               }
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
             </select>
           </div>
 

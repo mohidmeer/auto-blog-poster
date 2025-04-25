@@ -67,7 +67,7 @@ const Modal = ({ id = "close-dialog", title, children, content }: ModalProps) =>
                 ×
               </button>
             </div>
-            <div>{content}</div>
+            <div className="flex flex-col gap-4">{content}</div>
           </div>
         </div>
       )}

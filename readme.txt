@@ -1,8 +1,8 @@
 === Igentworks Auto Blogs ===
 Contributors: Igentworks
 Tags: auto blog, content generation, AI, automated posts, WordPress automation
-Requires at least: 5.0
-Tested up to: 6.0
+Requires at least: 6.0
+Tested up to: 6.8
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
