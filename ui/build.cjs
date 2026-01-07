@@ -3,7 +3,7 @@ const path = require('path');
 const archiver = require('archiver');
 
 const env = process.argv[2] || "default";
-const zipName = `${env}-auto-blog-poster.zip`;
+const zipName = `auto-blog-poster.zip`;
 
 
 const projectRoot = path.resolve(__dirname, '..');

@@ -43,7 +43,7 @@ const Modal = ({ id = "close-dialog", title, children, content }: ModalProps) =>
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="border border-black">
+    <div className="">
       <div onClick={() => setOpen(true)} className="cursor-pointer">
         {children}
       </div>

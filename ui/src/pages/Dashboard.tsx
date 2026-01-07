@@ -1,7 +1,7 @@
 import { Coins, Edit, Globe, LogOut, Pause, Play, Plus, Timer, Trash, Workflow } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom";
-import { getUsername } from "../lib/utils";
+import { getUseremail, getUsername, utcToLocalTime } from "../lib/utils";
 import { apiService } from "../api/client";
 import Modal from "../components/Modal";
 import AddCredits from "../components/AddCredits";
@@ -9,6 +9,7 @@ import AddScheduleForm from "../components/AddSchedule";
 import EditScheduleForm from "../components/EditSchedule";
 import { useEffect, useState } from "react";
 import moment from 'moment';
+import md5 from "md5";
 import {
     HoverCard,
     HoverCardContent,
@@ -37,25 +38,16 @@ const Dashboard = () => {
 
         fetchCredits();
     }, []);
-
-
-
     // Dynamically calculate the number of active schedules
-
-
     const handleLogout = () => {
         localStorage.removeItem("blogger-api-auth-token");
         navigate("/auth/login");
     };
     return (
-        <div className="p-10 ">
-            <div className="max-w-6xl mx-auto shadow-2xl p-4 border rounded-md">
-                <div className="flex justify-between items-center border-b pb-1">
-                    <Logo size={200}/>
-                    {/* <div className="flex items-center gap-1 font-bold">
-                        <div className="size-6  bg-primary" />
-                        Blog Flix
-                    </div> */}
+        <div className="container mx-auto">
+            <div className="">
+                <div className="flex justify-between items-center border px-4 py-2 ">
+                    <Logo size={300} />
                     <div className="flex gap-4 items-center">
                         <div className="flex items-center gap-2  font-bold">
                             {/* Loading or Error State for Credits */}
@@ -83,25 +75,34 @@ const Dashboard = () => {
                                     <Plus className="w-4 h-4" />
                                 </Button>
                             </Modal>
-
                         </div>
-                        <Button size="icon" className="hover:bg-destructive" onClick={() => { handleLogout() }}>
-                            <LogOut className="w-4 h-4" />
-                        </Button>
+                        <HoverCard openDelay={100} >
+                            <HoverCardTrigger>
+                                <Button size="icon" className="hover:bg-destructive" onClick={() => { handleLogout() }}>
+                                    <LogOut className="w-4 h-4" />
+                                </Button>
+                            </HoverCardTrigger>
+                            <HoverCardContent >
+                                <div className="flex gap-1">
+                                    <div className="shrink-0 overflow-hidden rounded-full">
+                                        <img src={`https://www.gravatar.com/avatar/${md5(getUseremail())}`} className=" h-10 w-10 shrink-0 " />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold">{getUsername()}</p>
+                                        <p className="text-sm text-primary/80 font-semibold">{getUseremail()}</p>
+                                    </div>
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
                     </div>
-
                 </div>
-                <div className="min-h-[40vh] flex flex-col justify-center p-4 ">
-                    <h1 className="text-6xl">Welcome back,<br />
-                        <span className="font-bold">{getUsername()}</span>
-                    </h1>
+                <div className="flex flex-col justify-center p-4 ">
                     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mt-10">
                         {/* Active Schedules */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
                             <p className="text-2xl font-bold">{activeSchedulesCount}</p>
                             <p className="text-sm">Active Schedules</p>
                         </div>
-
                         {/* Total Posts */}
                         <div className="bg-primary text-white p-6 rounded-lg text-center">
                             <p className="text-2xl font-bold">102</p>
@@ -117,15 +118,11 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="p-4">
-                    <h4 className="text-2xl font-bold mb-4  ">Your Schedules</h4>
+                    <h4 className="text-xl font-bold mb-4  ">Schedules</h4>
                     <Schedule setActiveScheduleCount={setActiveScheduleCount} />
                 </div>
             </div>
-
         </div>
-
-
-
     )
 }
 
@@ -183,6 +180,9 @@ function Schedule({ setActiveScheduleCount }: { setActiveScheduleCount: any }) {
         </div>
     );
     if (scheduleError) return <p className="text-red-500">{scheduleError}</p>;
+
+
+
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {schedules.map((item) => (
@@ -201,7 +201,7 @@ function Schedule({ setActiveScheduleCount }: { setActiveScheduleCount: any }) {
                             {
                                 item.active ?
                                     <PauseSchedule id={item._id} title={item.title} setSchedules={setSchedules} /> :
-                                    <RunSchedule message={item.last_run.message} id={item._id}  setSchedules={setSchedules} />
+                                    <RunSchedule message={item.last_run.message} id={item._id} setSchedules={setSchedules} />
                             }
                             <DeleteSchedule id={item._id} title={item.title} setSchedules={setSchedules} />
                         </div>
@@ -210,9 +210,8 @@ function Schedule({ setActiveScheduleCount }: { setActiveScheduleCount: any }) {
                         <p className="font-bold  p-0 line-clamp-2">{item.title}</p>
                         <div className="gap-1 text-sm font-bold text-gray-500 mt-2 flex items-center">
                             <Timer size={20} />
-                            <p>{item.schedule}</p>
-                            <p>|</p>
-                            <p>{item.time}</p>
+                            <p>{utcToLocalTime(item.schedule.split(',')[1])}</p>
+
                         </div>
                         <div className="mt-2 flex items-center justify-between">
                             <div className="flex gap-1 items-center ">
@@ -250,6 +249,20 @@ function Schedule({ setActiveScheduleCount }: { setActiveScheduleCount: any }) {
                     </div>
                 </div>
             ))}
+            {
+                !loadingSchedules && schedules.length === 0 &&
+                <div className="col-span-full flex items-center justify-center font-semibold   rounded-md  p-4  border-4 border-dashed ">
+                    <div className="p-8 text-xl">
+                        <Modal id="schedule-id" title="Add Post Schedule" content={<AddScheduleForm />}>
+                            <div className="text-center  flex flex-col gap-2">
+                                <p> <span className="text-center font-medium  ">No schedules found </span> </p>
+                                <Button className="">Create one</Button>
+                            </div>
+                        </Modal>
+
+                    </div>
+                </div>
+            }
         </div>
     )
 }
@@ -293,7 +306,7 @@ function PauseSchedule({ title, id, setSchedules }: { title: string, id: string,
         </Modal>
     )
 }
-function RunSchedule({  id, setSchedules ,message}: {  id: string, setSchedules: any, message: string | null; }) {
+function RunSchedule({ id, setSchedules, message }: { id: string, setSchedules: any, message: string | null; }) {
     async function run() {
         try {
             const response = await apiService.RunSchedule(id);
@@ -323,7 +336,7 @@ function RunSchedule({  id, setSchedules ,message}: {  id: string, setSchedules:
             title={'Are you sure you want to run this schedule ?'}
             content={
                 <>
-                    
+
                     <p className="text-sm font-semibold ">{message}</p>
                     <Button onClick={() => { run() }}>
                         Start Schedule

@@ -5,6 +5,7 @@ import { apiService } from "../api/client";
 import { toast } from "react-toastify";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Eye, EyeOff } from "lucide-react";
+import ScheduleTime from "./ScheduleTime";
 
 const AddScheduleForm = () => {
 
@@ -21,8 +22,7 @@ const AddScheduleForm = () => {
             title: "",
             instructions: "",
             niche: "",
-            schedule: 'daily',
-            time: "08:00",
+            schedule:'',
             username: "admin",
             website_url: window.location.origin,
             password: "",
@@ -190,48 +190,6 @@ const AddScheduleForm = () => {
                         </div>
                     </div>
 
-                    <div className="flex gap-2 flex-col sm:flex-row ">
-                        {/* Schedule */}
-                        <div className="flex flex-col gap-1 w-full">
-                            <label className="text-xs font-semibold">Schedule</label>
-                            <select
-                                className="input w-full input-sm"
-                                data-error={errors.schedule && true}
-                                {...register("schedule" ,{ required: "Schedule is required" } )}
-                            >
-                                {
-                                    import.meta.env.VITE_ENV == 'dev' &&
-                                    <option value="minute">Minute</option>
-                                }
-                                <option value="daily">Daily</option>
-                                <option value="weekly">Weekly</option>
-                            </select>
-                            {errors.schedule && (
-                                <p className="text-xs mt-1 font-semibold text-red-500">
-                                    {errors.schedule.message as string}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Time */}
-                        <div className="flex flex-col gap-1 w-full">
-                            <label className="text-xs font-semibold">Time</label>
-                            <input
-                                className={`input w-full input-sm ${errors.time ? "border-red-500" : ""}`}
-                                type="time"
-                                data-error={errors.time && true}
-                                {...register("time", { required: "Time is required" })}
-                            />
-
-                            {errors.time && (
-                                <p className="text-xs mt-1 font-semibold text-red-500">
-                                    {errors.time.message as string}
-                                </p>
-                            )}
-
-                        </div>
-                    </div>
-
                     <div className="flex flex-col md:flex-row gap-2">
                         {/* Website URL */}
                         <div className="flex flex-col gap-1 w-full">
@@ -312,6 +270,12 @@ const AddScheduleForm = () => {
                         )}
                     </div>
 
+
+                    <ScheduleTime initialDays={95} initialTime="" onUpdate={(v: any) => {
+                        setValue('schedule', v)
+                    }} />
+
+                    
                     {/* Submit Button */}
                     <div className="flex flex-col gap-1 mt-4">
                         <Button disabled={loading}>

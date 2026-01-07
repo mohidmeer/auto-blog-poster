@@ -5,6 +5,8 @@ import { apiService } from "../api/client";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import ScheduleTime from "./ScheduleTime";
+import { utcToLocalTime24HoursFormat } from "../lib/utils";
 
 const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
 
@@ -15,6 +17,7 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -75,6 +78,24 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
       setType('text')
     }
   }
+
+
+  const schedulev = getValues("schedule");
+
+  const [initialDays, setInitialDays] = useState<number | null>(null);
+  const [initialTime, setInitialTime] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    if (schedule) {
+      reset(schedule);
+
+      const [days, time] = schedule.schedule?.split(",") || [];
+      setInitialDays(Number(days));
+      setInitialTime(utcToLocalTime24HoursFormat(time));
+    }
+  }, [schedulev, reset]);
+
 
   return (
     <form
@@ -146,28 +167,7 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
             </div>
           </div>
 
-          {/* Schedule */}
-          <div className="flex flex-col gap-1 w-full">
-            <label className="text-xs font-semibold">Schedule</label>
-            <select className="input w-full input-sm" {...register("schedule")}>
-              {
-                import.meta.env.VITE_ENV == 'dev' &&
-                <option value="minute">Minute</option>
-              }
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-          </div>
-
-          {/* Time */}
-          <div className="flex flex-col gap-1 w-full">
-            <label className="text-xs font-semibold">Time</label>
-            <input
-              className="input w-full input-sm"
-              type="time"
-              {...register("time")}
-            />
-          </div>
+ 
 
           <div className="flex flex-col md:flex-row gap-2">
             {/* Website URL */}
@@ -261,6 +261,14 @@ const EditScheduleForm = ({ schedule }: { schedule?: any }) => {
               </p>
             )}
           </div>
+
+
+          {
+            initialDays &&
+            <ScheduleTime initialDays={initialDays} initialTime={initialTime || ''} onUpdate={(v: any) => {
+              setValue('schedule', v)
+            }} />
+          }
 
           {/* Submit */}
           <div className="flex flex-col gap-1 mt-1">

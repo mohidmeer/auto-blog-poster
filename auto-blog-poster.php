@@ -31,9 +31,10 @@ add_action('admin_menu', function () {
 function render_auto_blog_poster() {
 
     $nonce = wp_create_nonce('wp_rest');
-    echo '<div   id="auto-blogger"></div>';
+    echo '<div id="auto-blogger"></div>';
+    // Escape the nonce for JavaScript output
     echo "<script>
-        window.autoBloggerData = {nonce: '$nonce'};
+        window.autoBloggerData = {nonce: '" . esc_js($nonce) . "'};
     </script>";
 }
 
